@@ -13,7 +13,7 @@ using namespace boost::asio;
 Network::Server::Server(int port) : ipAddress(getIPAddress()),
                                     port(port),
                                     io_service(),
-                                    acceptor(io_service, ip::tcp::endpoint(ip::tcp::v4(), static_cast<unsigned short>(port))),
+                                    acceptor(io_service, ip::tcp::endpoint(ip::tcp::v4(), static_cast<unsigned short>(port)))
 {
     logInformation();
 }
