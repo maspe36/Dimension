@@ -6,7 +6,7 @@ using namespace Network;
 
 int main()
 {
-    std::shared_ptr<Server> server = std::make_shared<Server>(9001);
+    std::shared_ptr<Server> server = std::make_shared<Server>(8888);
     server->start();
 
     while (server->isRunning()) {}
