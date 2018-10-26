@@ -7,7 +7,9 @@ set(test_files
         CatchMain.cpp
         src/test_Server.cpp)
 
-set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_LIBS        ON)
+set(Boost_USE_MULTITHREADED      ON)
+set(Boost_USE_STATIC_RUNTIME    OFF)
 find_package(Boost 1.58.0 REQUIRED system log)
 find_package(PostgreSQL 9.5.12 REQUIRED)
 find_package(libpqxx REQUIRED)
