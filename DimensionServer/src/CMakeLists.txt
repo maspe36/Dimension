@@ -8,7 +8,9 @@ set(project_files
         ${CMAKE_SOURCE_DIR}/src/Network/Server.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Session.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Session.hpp
-        CACHE INTERNAL "")
+        ${CMAKE_SOURCE_DIR}/src/Network/SessionHandler.cpp
+        ${CMAKE_SOURCE_DIR}/src/Network/SessionHandler.hpp
+        CACHE INTERNAL "" )
 
 set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)

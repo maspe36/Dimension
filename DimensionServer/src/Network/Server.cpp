@@ -1,6 +1,7 @@
 //
 // Created by Sam on 10/26/2018.
 //
+
 #include "Server.hpp"
 
 #include <ifaddrs.h>
@@ -26,8 +27,7 @@ void Network::Server::listen()
             if (!err)
             {
                 BOOST_LOG_TRIVIAL(info) << "Connection from: " << session->getAddress();
-
-                // Create main menu session handler and sink the session
+                menuHandler.start(session);
 
                 listen();
             }
@@ -45,6 +45,11 @@ void Network::Server::logStatus()
     BOOST_LOG_TRIVIAL(info) << "IP: " << getAddress();
     BOOST_LOG_TRIVIAL(info) << "Port: " << std::to_string(port);
     BOOST_LOG_TRIVIAL(info) << "Listening...";
+}
+
+void Network::Server::logHandler()
+{
+    BOOST_LOG_TRIVIAL(info) << "Menu Handler: " << menuHandler.size() << " sessions";
 }
 
 std::string Network::Server::getAddress()

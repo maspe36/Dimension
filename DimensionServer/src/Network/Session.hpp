@@ -18,12 +18,15 @@ namespace Network
     class Session : public std::enable_shared_from_this<Session>
     {
     public:
+        using pointer = std::shared_ptr<Session>;
+
         explicit Session(boost::asio::io_service& ios);
 
         std::string getAddress();
         tcp::socket& getSocket();
+        std::string readBuffer();
 
-        void listen(std::function<void(std::string)> handler);
+        void listen(std::function<void(pointer, const boost::system::error_code&)> handler);
         void write(std::string data);
         void cancel();
         void close();
@@ -31,8 +34,6 @@ namespace Network
     private:
         tcp::socket socket;
         boost::asio::streambuf buffer;
-
-        std::string readBuffer();
     };
 }
 

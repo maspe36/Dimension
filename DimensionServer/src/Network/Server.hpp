@@ -11,6 +11,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include "Session.hpp"
+#include "SessionHandler.hpp"
 
 namespace Network
 {
@@ -23,8 +24,11 @@ namespace Network
 
         void listen();
         void logStatus();
+        void logHandler();
 
     private:
+        SessionHandler menuHandler;
+
         unsigned short port;
         std::string ipAddress;
 
