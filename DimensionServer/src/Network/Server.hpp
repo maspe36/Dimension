@@ -1,43 +1,39 @@
 //
-// Created by Sam on 10/20/2018.
+// Created by Sam on 10/26/2018.
 //
 
 #ifndef DIMENSIONSERVER_SERVER_HPP
 #define DIMENSIONSERVER_SERVER_HPP
 
+
+#include <iostream>
 #include <memory>
 #include <boost/asio.hpp>
-#include <boost/thread.hpp>
-#include <boost/smart_ptr.hpp>
-#include "Client.hpp"
+#include <boost/bind.hpp>
+#include "Session.hpp"
 
 namespace Network
 {
-    class Server : public std::enable_shared_from_this<Server>
+    using boost::asio::ip::tcp;
+
+    class Server
     {
     public:
-        explicit Server(int port);
+        Server(boost::asio::io_service& ios, unsigned short port);
 
-        void logInformation();
-
-        void start();
-        void stop();
-        void handleConnection();
-        void onConnection(Client::pointer client, const boost::system::error_code &error);
-
-        bool isRunning();
-
-        typedef std::shared_ptr<Server> pointer;
+        void listen();
+        void logStatus();
 
     private:
+        unsigned short port;
         std::string ipAddress;
-        int port;
-        boost::asio::io_service io_service;
-        boost::asio::ip::tcp::acceptor acceptor;
-        boost::scoped_ptr<boost::thread> io_thread;
 
-        std::string getIPAddress();
+        boost::asio::io_service& ios;
+        tcp::acceptor acceptor;
+
+        std::string getAddress();
     };
 }
+
 
 #endif //DIMENSIONSERVER_SERVER_HPP

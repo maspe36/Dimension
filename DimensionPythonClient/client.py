@@ -22,7 +22,7 @@ print("Attempting to connect to the localhost...")
 ENDPOINT = LOCAL_ENDPOINT
 
 sock = socket.socket()
-port = 8888
+port = 8080
 
 sock.connect((ENDPOINT, port))
 

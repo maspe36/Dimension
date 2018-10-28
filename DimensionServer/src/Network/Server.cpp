@@ -1,90 +1,54 @@
 //
-// Created by Sam on 10/20/2018.
+// Created by Sam on 10/26/2018.
 //
-
 #include "Server.hpp"
-#include <string>
-#include <iostream>
+
 #include <ifaddrs.h>
 #include <boost/log/trivial.hpp>
 
-using namespace boost::asio;
 
-Network::Server::Server(int port) : ipAddress(getIPAddress()),
-                                    port(port),
-                                    io_service(),
-                                    acceptor(io_service, ip::tcp::endpoint(ip::tcp::v4(), static_cast<unsigned short>(port)))
+Network::Server::Server(boost::asio::io_service &ios, unsigned short port) : ios(ios),
+                                                                             port(port),
+                                                                             ipAddress(getAddress()),
+                                                                             acceptor(ios, tcp::endpoint(tcp::v4(), port))
 {
-    logInformation();
+    listen();
+    logStatus();
 }
 
-void Network::Server::logInformation()
+void Network::Server::listen()
 {
-    BOOST_LOG_TRIVIAL(info) << "IP: " << getIPAddress();
-    BOOST_LOG_TRIVIAL(info) << "Port: " << std::to_string(port);
+    std::shared_ptr<Session> session = std::make_shared<Session>(ios);
+    acceptor.async_accept(
+        session->getSocket(),
+        [session, this] (const boost::system::error_code &err)
+        {
+            if (!err)
+            {
+                BOOST_LOG_TRIVIAL(info) << "Connection from: " << session->getAddress();
+
+                // Create main menu session handler and sink the session
+
+                listen();
+            }
+            else
+            {
+                BOOST_LOG_TRIVIAL(error) << err.message();
+                session->shared_from_this().reset();
+            }
+        });
 }
 
-void Network::Server::start()
+void Network::Server::logStatus()
 {
-    if (isRunning())
-    {
-        BOOST_LOG_TRIVIAL(warning) << "Server already started";
-        return;
-    }
-
-    BOOST_LOG_TRIVIAL(info) << "Starting server...";
-
-    io_thread.reset(new boost::thread(
-            boost::bind(&boost::asio::io_service::run, &io_service)
-    ));
-
-    BOOST_LOG_TRIVIAL(info) << "Listening for connections...";
-    handleConnection();
-
     BOOST_LOG_TRIVIAL(info) << "Server started";
+    BOOST_LOG_TRIVIAL(info) << "IP: " << getAddress();
+    BOOST_LOG_TRIVIAL(info) << "Port: " << std::to_string(port);
+    BOOST_LOG_TRIVIAL(info) << "Listening...";
 }
 
-void Network::Server::stop()
+std::string Network::Server::getAddress()
 {
-    if (!isRunning())
-    {
-        BOOST_LOG_TRIVIAL(warning) << "Server already stopped";
-        return;
-    }
-
-    BOOST_LOG_TRIVIAL(info) << "Stopping server...";
-
-    io_service.stop();
-    io_thread->join();
-
-    io_service.reset();
-    io_thread.reset();
-
-    BOOST_LOG_TRIVIAL(info) << "Server stopped";
-}
-
-void Network::Server::handleConnection()
-{
-    Client::pointer client = std::make_shared<Client>(acceptor.get_io_service());
-
-    acceptor.async_accept(client->socket, boost::bind(&Network::Server::onConnection, this, client, boost::asio::placeholders::error));
-}
-
-void Network::Server::onConnection(Client::pointer client, const boost::system::error_code &error)
-{
-    if (!error) {
-        BOOST_LOG_TRIVIAL(info) << "Client connected from '" << client->getIPAddress() << "'";
-    }
-
-    handleConnection();
-}
-
-bool Network::Server::isRunning()
-{
-    return bool(io_thread);
-}
-
-std::string Network::Server::getIPAddress() {
     std::string defaultIPAddressValue = "Unable to get IP Address";
     std::string ipAddress = defaultIPAddressValue;
     std::string ipFilter = "192";

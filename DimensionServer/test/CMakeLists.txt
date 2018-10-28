@@ -5,7 +5,7 @@ message(--------------------)
 
 set(test_files
         CatchMain.cpp
-        src/test_Server.cpp)
+        )
 
 set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)

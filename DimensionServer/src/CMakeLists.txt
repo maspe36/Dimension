@@ -6,8 +6,8 @@ message(--------------------)
 set(project_files
         ${CMAKE_SOURCE_DIR}/src/Network/Server.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Server.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network/Client.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network/Client.hpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Session.cpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Session.hpp
         CACHE INTERNAL "")
 
 set(Boost_USE_STATIC_LIBS        ON)
