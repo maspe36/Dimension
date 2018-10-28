@@ -1,9 +1,10 @@
 //
 // Created by Sam on 10/26/2018.
 //
-
 #include "Session.hpp"
+
 #include <boost/log/trivial.hpp>
+
 
 using namespace Network;
 
