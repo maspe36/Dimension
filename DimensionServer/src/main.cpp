@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
         // Create the IO Service
         boost::asio::io_service ios;
 
-        // Create the server which will create session objects
+        // Create the server which will create connection objects
         Network::Server server(ios, 8080);
 
         // Spin up another thread for the IO Service to listen for incoming connections

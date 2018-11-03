@@ -11,20 +11,20 @@
 
 namespace Network
 {
-    class SessionHandler
+    class Bucket
     {
     public:
-        SessionHandler();
+        Bucket();
 
-        void start(Connection::pointer session);
-        void stop(Connection::pointer session);
+        void start(Connection::pointer connection);
+        void stop(Connection::pointer connection);
 
         size_t size();
 
     private:
-        std::set<Connection::pointer> sessions;
+        std::set<Connection::pointer> connections;
 
-        void handler(Connection::pointer session);
+        void handler(Connection::pointer connection);
     };
 }
 

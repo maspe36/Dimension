@@ -11,7 +11,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include "Connection.hpp"
-#include "ConnectionHandler.hpp"
+#include "Bucket.hpp"
 
 namespace Network
 {
@@ -27,7 +27,7 @@ namespace Network
         void logHandler();
 
     private:
-        SessionHandler menuHandler;
+        Bucket menuHandler;
 
         unsigned short port;
         std::string ipAddress;

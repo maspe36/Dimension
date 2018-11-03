@@ -19,22 +19,22 @@ Network::Server::Server(boost::asio::io_service &ios, unsigned short port) : ios
 
 void Network::Server::listen()
 {
-    std::shared_ptr<Connection> session = std::make_shared<Connection>(ios);
+    std::shared_ptr<Connection> connection = std::make_shared<Connection>(ios);
     acceptor.async_accept(
-        session->getSocket(),
-        [session, this] (const boost::system::error_code &err)
+        connection->getSocket(),
+        [connection, this] (const boost::system::error_code &err)
         {
             if (!err)
             {
-                BOOST_LOG_TRIVIAL(info) << "Connection from: " << session->getAddress();
-                menuHandler.start(session);
+                BOOST_LOG_TRIVIAL(info) << "Connection from: " << connection->getAddress();
+                menuHandler.start(connection);
 
                 listen();
             }
             else
             {
                 BOOST_LOG_TRIVIAL(error) << err.message();
-                session->shared_from_this().reset();
+                connection->shared_from_this().reset();
             }
         });
 }
@@ -49,7 +49,7 @@ void Network::Server::logStatus()
 
 void Network::Server::logHandler()
 {
-    BOOST_LOG_TRIVIAL(info) << "Menu Handler: " << menuHandler.size() << " sessions";
+    BOOST_LOG_TRIVIAL(info) << "Menu Handler: " << menuHandler.size() << " connections";
 }
 
 std::string Network::Server::getAddress()
