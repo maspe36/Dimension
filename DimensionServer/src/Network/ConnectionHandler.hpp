@@ -6,7 +6,7 @@
 #define DIMENSIONSERVER_SESSIONHANDLER_HPP
 
 
-#include "Session.hpp"
+#include "Connection.hpp"
 #include <set>
 
 namespace Network
@@ -16,15 +16,15 @@ namespace Network
     public:
         SessionHandler();
 
-        void start(Session::pointer session);
-        void stop(Session::pointer session);
+        void start(Connection::pointer session);
+        void stop(Connection::pointer session);
 
         size_t size();
 
     private:
-        std::set<Session::pointer> sessions;
+        std::set<Connection::pointer> sessions;
 
-        void handler(Session::pointer session);
+        void handler(Connection::pointer session);
     };
 }
 

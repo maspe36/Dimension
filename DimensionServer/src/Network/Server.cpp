@@ -19,7 +19,7 @@ Network::Server::Server(boost::asio::io_service &ios, unsigned short port) : ios
 
 void Network::Server::listen()
 {
-    std::shared_ptr<Session> session = std::make_shared<Session>(ios);
+    std::shared_ptr<Connection> session = std::make_shared<Connection>(ios);
     acceptor.async_accept(
         session->getSocket(),
         [session, this] (const boost::system::error_code &err)

@@ -2,7 +2,7 @@
 // Created by Sam on 10/26/2018.
 //
 
-#include "Session.hpp"
+#include "Connection.hpp"
 
 #include <boost/log/trivial.hpp>
 
@@ -11,21 +11,21 @@ using namespace Network;
 
 const static std::string DELIMITER = "\n";
 
-Network::Session::Session(boost::asio::io_service &ios) : socket(ios)
+Network::Connection::Connection(boost::asio::io_service &ios) : socket(ios)
 {
 }
 
-std::string Session::getAddress()
+std::string Connection::getAddress()
 {
     return shared_from_this()->getSocket().remote_endpoint().address().to_string();
 }
 
-tcp::socket& Network::Session::getSocket()
+tcp::socket& Network::Connection::getSocket()
 {
     return socket;
 }
 
-std::string Session::readBuffer()
+std::string Connection::readBuffer()
 {
     boost::asio::streambuf::const_buffers_type bufs = buffer.data();
     std::string data(
@@ -39,7 +39,7 @@ std::string Session::readBuffer()
     return data.substr(0, data.size() - 1);
 }
 
-void Session::listen(std::function<void(Network::Session::pointer, const boost::system::error_code&)> handler)
+void Connection::listen(std::function<void(Network::Connection::pointer, const boost::system::error_code&)> handler)
 {
     auto self(shared_from_this());
     boost::asio::async_read_until(socket, buffer, DELIMITER,
@@ -54,7 +54,7 @@ void Session::listen(std::function<void(Network::Session::pointer, const boost::
         });
 }
 
-void Session::write(std::string data)
+void Connection::write(std::string data)
 {
     data.append(DELIMITER);
 
@@ -68,12 +68,12 @@ void Session::write(std::string data)
         });
 }
 
-void Session::cancel()
+void Connection::cancel()
 {
     socket.cancel();
 }
 
-void Session::close()
+void Connection::close()
 {
     socket.close();
 }

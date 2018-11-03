@@ -10,8 +10,8 @@
 #include <memory>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
-#include "Session.hpp"
-#include "SessionHandler.hpp"
+#include "Connection.hpp"
+#include "ConnectionHandler.hpp"
 
 namespace Network
 {

@@ -2,18 +2,18 @@
 // Created by Sam on 10/28/2018.
 //
 
-#include "SessionHandler.hpp"
+#include "ConnectionHandler.hpp"
 
 #include <boost/log/trivial.hpp>
 
 Network::SessionHandler::SessionHandler()
 = default;
 
-void Network::SessionHandler::start(Session::pointer session)
+void Network::SessionHandler::start(Connection::pointer session)
 {
     sessions.insert(session);
     session->listen(
-            [=] (Network::Session::pointer session, const boost::system::error_code& err)
+            [=] (Network::Connection::pointer session, const boost::system::error_code& err)
             {
                 if (err)
                 {
@@ -26,7 +26,7 @@ void Network::SessionHandler::start(Session::pointer session)
             });
 }
 
-void Network::SessionHandler::stop(Session::pointer session)
+void Network::SessionHandler::stop(Connection::pointer session)
 {
     sessions.erase(session);
     session->close();
@@ -37,7 +37,7 @@ size_t Network::SessionHandler::size()
     return sessions.size();
 }
 
-void Network::SessionHandler::handler(Network::Session::pointer session)
+void Network::SessionHandler::handler(Network::Connection::pointer session)
 {
     std::string data = session->readBuffer();
     BOOST_LOG_TRIVIAL(info) << "Message from " << session->getAddress() << ": " << data;

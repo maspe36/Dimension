@@ -15,12 +15,12 @@ namespace Network
 {
     using boost::asio::ip::tcp;
 
-    class Session : public std::enable_shared_from_this<Session>
+    class Connection : public std::enable_shared_from_this<Connection>
     {
     public:
-        using pointer = std::shared_ptr<Session>;
+        using pointer = std::shared_ptr<Connection>;
 
-        explicit Session(boost::asio::io_service& ios);
+        explicit Connection(boost::asio::io_service& ios);
 
         std::string getAddress();
         tcp::socket& getSocket();

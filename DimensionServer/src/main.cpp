@@ -33,6 +33,8 @@ int main(int argc, char *argv[])
             }
         }
 
+        ios.stop();
+        io_thread.join();
     } catch(std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
