@@ -11,7 +11,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include "Connection.hpp"
-#include "Bucket.hpp"
+#include "Lobby.hpp"
 
 namespace Network
 {
@@ -24,19 +24,19 @@ namespace Network
 
         void listen();
         void logStatus();
-        void logHandler();
+        void logLobby();
 
     private:
-        Bucket menuHandler;
+        Lobby lobby;
 
         unsigned short port;
         std::string ipAddress;
 
         boost::asio::io_service& ios;
         tcp::acceptor acceptor;
-
-        std::string getAddress();
     };
+
+    static const std::string getAddress();
 }
 
 

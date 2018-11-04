@@ -8,8 +8,8 @@ set(project_files
         ${CMAKE_SOURCE_DIR}/src/Network/Server.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Connection.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Connection.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network/Bucket.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network/Bucket.hpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Lobby.cpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Lobby.hpp
         CACHE INTERNAL "" )
 
 set(Boost_USE_STATIC_LIBS        ON)

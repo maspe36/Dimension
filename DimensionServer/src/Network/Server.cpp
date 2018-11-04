@@ -11,7 +11,8 @@
 Network::Server::Server(boost::asio::io_service &ios, unsigned short port) : ios(ios),
                                                                              port(port),
                                                                              ipAddress(getAddress()),
-                                                                             acceptor(ios, tcp::endpoint(tcp::v4(), port))
+                                                                             acceptor(ios, tcp::endpoint(tcp::v4(), port)),
+                                                                             lobby(this)
 {
     listen();
     logStatus();
@@ -27,7 +28,7 @@ void Network::Server::listen()
             if (!err)
             {
                 BOOST_LOG_TRIVIAL(info) << "Connection from: " << connection->getAddress();
-                menuHandler.start(connection);
+                lobby.join(connection);
 
                 listen();
             }
@@ -47,12 +48,12 @@ void Network::Server::logStatus()
     BOOST_LOG_TRIVIAL(info) << "Listening...";
 }
 
-void Network::Server::logHandler()
+void Network::Server::logLobby()
 {
-    BOOST_LOG_TRIVIAL(info) << "Menu Handler: " << menuHandler.size() << " connections";
+    BOOST_LOG_TRIVIAL(info) << "Lobby: " << lobby.size() << " connection(s)";
 }
 
-std::string Network::Server::getAddress()
+static const std::string Network::getAddress()
 {
     std::string defaultIPAddressValue = "Unable to get IP Address";
     std::string ipAddress = defaultIPAddressValue;
