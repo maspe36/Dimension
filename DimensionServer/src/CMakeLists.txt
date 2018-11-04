@@ -6,10 +6,10 @@ message(--------------------)
 set(project_files
         ${CMAKE_SOURCE_DIR}/src/Network/Server.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Server.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network/Session.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network/Session.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network/SessionHandler.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network/SessionHandler.hpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Connection.cpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Connection.hpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Bucket.cpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Bucket.hpp
         CACHE INTERNAL "" )
 
 set(Boost_USE_STATIC_LIBS        ON)
