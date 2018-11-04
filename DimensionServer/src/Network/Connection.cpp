@@ -9,7 +9,7 @@
 
 using namespace Network;
 
-const static std::string DELIMITER = "\n";
+const std::string Connection::DELIMITER = "\n";
 
 Network::Connection::Connection(boost::asio::io_service &ios) : socket(ios)
 {
@@ -39,7 +39,7 @@ std::string Connection::readBuffer()
     return data.substr(0, data.size() - 1);
 }
 
-void Connection::listen(std::function<void(Network::Connection::pointer, const boost::system::error_code&)> handler)
+void Connection::listen(responseFunction handler)
 {
     auto self(shared_from_this());
     boost::asio::async_read_until(socket, buffer, DELIMITER,

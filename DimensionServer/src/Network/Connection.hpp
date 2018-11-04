@@ -19,6 +19,7 @@ namespace Network
     {
     public:
         using pointer = std::shared_ptr<Connection>;
+        using responseFunction = std::function<void(pointer, const boost::system::error_code&)>;
 
         explicit Connection(boost::asio::io_service& ios);
 
@@ -26,12 +27,14 @@ namespace Network
         tcp::socket& getSocket();
         std::string readBuffer();
 
-        void listen(std::function<void(pointer, const boost::system::error_code&)> handler);
+        void listen(responseFunction handler);
         void write(std::string data);
         void cancel();
         void close();
 
     private:
+        static const std::string DELIMITER;
+
         tcp::socket socket;
         boost::asio::streambuf buffer;
     };
