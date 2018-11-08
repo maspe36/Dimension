@@ -8,7 +8,7 @@
 
 #include <boost/log/trivial.hpp>
 
-Network::Lobby::Lobby(Network::Server* server, Network::handlerFunc handler): server(server),
+Network::Lobby::Lobby(Network::Server* server, Network::handlerFunction handler): server(server),
                                                                               handler(std::move(handler))
 {}
 

@@ -13,12 +13,12 @@ namespace Network
 {
     class Server;
 
-    using handlerFunc = std::function<void(Server*, Connection::pointer)>;
+    using handlerFunction = std::function<void(Server*, Connection::pointer)>;
 
     class Lobby
     {
     public:
-        Lobby(Server* server, handlerFunc handler);
+        Lobby(Server* server, handlerFunction handler);
 
         void join(Connection::pointer connection);
         void leave(Connection::pointer connection);
@@ -30,7 +30,7 @@ namespace Network
     private:
         std::set<Connection::pointer> connections;
         Server* server;
-        handlerFunc handler;
+        handlerFunction handler;
     };
 }
 
