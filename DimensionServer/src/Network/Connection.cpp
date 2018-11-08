@@ -54,7 +54,7 @@ void Connection::listen(responseFunction handler)
         });
 }
 
-void Connection::write(std::string data)
+void Connection::write(std::string& data)
 {
     data.append(DELIMITER);
 
