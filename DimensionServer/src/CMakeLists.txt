@@ -4,13 +4,15 @@ message(\nRunning src CMakeLists.txt)
 message(--------------------)
 
 set(project_files
-        ${CMAKE_SOURCE_DIR}/src/Network/Server.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network/Server.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Connection.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Connection.hpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Handlers.cpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Handlers.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Lobby.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Lobby.hpp
-        CACHE INTERNAL "" )
+        ${CMAKE_SOURCE_DIR}/src/Network/Server.cpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Server.hpp
+        CACHE INTERNAL "")
 
 set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)

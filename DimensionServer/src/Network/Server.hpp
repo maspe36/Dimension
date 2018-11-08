@@ -26,8 +26,11 @@ namespace Network
         void logStatus();
         void logLobby();
 
-    private:
+        void moveConnection(Connection::pointer connection, Lobby* source, Lobby* destination);
+
         Lobby lobby;
+        Lobby queue;
+    private:
 
         unsigned short port;
         std::string ipAddress;

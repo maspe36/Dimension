@@ -54,11 +54,11 @@ void Connection::listen(responseFunction handler)
         });
 }
 
-void Connection::write(std::string& data)
+void Connection::write(const std::string& data)
 {
-    data.append(DELIMITER);
+    auto finalData = data + DELIMITER;
 
-    boost::asio::async_write(socket, boost::asio::buffer(data.c_str(), data.size()),
+    boost::asio::async_write(socket, boost::asio::buffer(finalData.c_str(), finalData.size()),
         [data, this](const boost::system::error_code& err, size_t bytes_transferred)
         {
             if (err)

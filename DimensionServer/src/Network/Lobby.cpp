@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by Sam on 10/28/2018.
 //
@@ -6,7 +8,8 @@
 
 #include <boost/log/trivial.hpp>
 
-Network::Lobby::Lobby(Server* server) : server(server)
+Network::Lobby::Lobby(Network::Server* server, Network::handlerFunc handler): server(server),
+                                                                              handler(std::move(handler))
 {}
 
 void Network::Lobby::join(Connection::pointer connection)
@@ -22,7 +25,7 @@ void Network::Lobby::join(Connection::pointer connection)
                 }
                 else
                 {
-                    handler(connection);
+                    handler(server, connection);
                 }
             });
 }
@@ -39,14 +42,12 @@ void Network::Lobby::disconnect(Network::Connection::pointer connection)
     connection->close();
 }
 
+bool Network::Lobby::contains(Network::Connection::pointer connection)
+{
+    return connections.find(connection) != connections.end();
+}
+
 size_t Network::Lobby::size()
 {
     return connections.size();
-}
-
-void Network::Lobby::handler(Network::Connection::pointer connection)
-{
-    std::string data = connection->readBuffer();
-    BOOST_LOG_TRIVIAL(info) << "Message from " << connection->getAddress() << ": " << data;
-    connection->write(data);
 }

@@ -28,7 +28,7 @@ namespace Network
         std::string readBuffer();
 
         void listen(responseFunction handler);
-        void write(std::string& data);
+        void write(const std::string& data);
         void cancel();
         void close();
 

@@ -3,6 +3,7 @@
 //
 
 #include "Server.hpp"
+#include "Handlers.hpp"
 
 #include <ifaddrs.h>
 #include <boost/log/trivial.hpp>
@@ -12,7 +13,8 @@ Network::Server::Server(boost::asio::io_service &ios, unsigned short port) : ios
                                                                              port(port),
                                                                              ipAddress(getAddress()),
                                                                              acceptor(ios, tcp::endpoint(tcp::v4(), port)),
-                                                                             lobby(this)
+                                                                             lobby(this, Network::menuHandler),
+                                                                             queue(this, Network::queueHandler)
 {
     listen();
     logStatus();
@@ -51,6 +53,12 @@ void Network::Server::logStatus()
 void Network::Server::logLobby()
 {
     BOOST_LOG_TRIVIAL(info) << "Lobby: " << lobby.size() << " connection(s)";
+}
+
+void Network::Server::moveConnection(Network::Connection::pointer connection, Network::Lobby* source, Network::Lobby* destination)
+{
+    source->leave(connection);
+    destination->join(connection);
 }
 
 static const std::string Network::getAddress()

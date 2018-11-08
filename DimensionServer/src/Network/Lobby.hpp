@@ -13,22 +13,24 @@ namespace Network
 {
     class Server;
 
+    using handlerFunc = std::function<void(Server*, Connection::pointer)>;
+
     class Lobby
     {
     public:
-        explicit Lobby(Server* server);
+        Lobby(Server* server, handlerFunc handler);
 
         void join(Connection::pointer connection);
         void leave(Connection::pointer connection);
         void disconnect(Connection::pointer connection);
+        bool contains(Connection::pointer connection);
 
         size_t size();
 
     private:
         std::set<Connection::pointer> connections;
         Server* server;
-
-        void handler(Connection::pointer connection);
+        handlerFunc handler;
     };
 }
 
