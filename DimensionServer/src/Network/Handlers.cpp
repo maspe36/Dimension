@@ -14,7 +14,6 @@ const void Network::menuHandler(Network::Server* server, Network::Connection::po
 
     if (data == "queue")
     {
-        // Move this connection to the queue lobby
         server->beginQueue(connection);
         connection->write("queueing...");
     }
