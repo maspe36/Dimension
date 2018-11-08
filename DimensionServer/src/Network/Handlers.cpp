@@ -8,40 +8,28 @@
 
 const void Network::menuHandler(Network::Server* server, Network::Connection::pointer connection)
 {
+    connection->write("menuHandler");
+
     std::string data = connection->readBuffer();
 
     if (data == "queue")
     {
         // Move this connection to the queue lobby
-        server->moveConnection(connection, &server->lobby, &server->queue);
-
-        if (server->queue.contains(connection))
-        {
-            connection->write("queueing...");
-        }
-        else
-        {
-            connection->write("queueing failed");
-        }
+        server->beginQueue(connection);
+        connection->write("queueing...");
     }
 }
 
 const void Network::queueHandler(Network::Server* server, std::shared_ptr<Network::Connection> connection)
 {
+    connection->write("queueHandler");
+
     std::string data = connection->readBuffer();
     connection->write(data);
 
     if (data == "cancel")
     {
-        server->moveConnection(connection, &server->queue, &server->lobby);
-
-        if (server->lobby.contains(connection))
-        {
-            connection->write("returned to lobby");
-        }
-        else
-        {
-            connection->write("canceling queue failed");
-        }
+        server->cancelQueue(connection);
+        connection->write("returned to lobby");
     }
 }

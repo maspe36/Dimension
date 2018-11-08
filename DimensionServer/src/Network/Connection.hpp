@@ -23,20 +23,24 @@ namespace Network
 
         explicit Connection(boost::asio::io_service& ios);
 
+        std::string address;
+
         std::string getAddress();
         tcp::socket& getSocket();
         std::string readBuffer();
 
         void listen(responseFunction handler);
         void write(const std::string& data);
-        void cancel();
         void close();
 
     private:
         static const std::string DELIMITER;
 
+        responseFunction handler;
         tcp::socket socket;
         boost::asio::streambuf buffer;
+
+        void listen();
     };
 }
 

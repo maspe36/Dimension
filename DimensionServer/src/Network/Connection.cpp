@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by Sam on 10/26/2018.
 //
@@ -17,7 +19,12 @@ Network::Connection::Connection(boost::asio::io_service &ios) : socket(ios)
 
 std::string Connection::getAddress()
 {
-    return shared_from_this()->getSocket().remote_endpoint().address().to_string();
+    if (address.empty())
+    {
+        address = shared_from_this()->getSocket().remote_endpoint().address().to_string();
+    }
+
+    return address;
 }
 
 tcp::socket& Network::Connection::getSocket()
@@ -41,17 +48,8 @@ std::string Connection::readBuffer()
 
 void Connection::listen(responseFunction handler)
 {
-    auto self(shared_from_this());
-    boost::asio::async_read_until(socket, buffer, DELIMITER,
-        [handler, this, self] (const boost::system::error_code& err, size_t bytes_transferred)
-        {
-            handler(self, err);
-
-            if (!err)
-            {
-                listen(handler);
-            }
-        });
+    this->handler = std::move(handler);
+    listen();
 }
 
 void Connection::write(const std::string& data)
@@ -68,12 +66,22 @@ void Connection::write(const std::string& data)
         });
 }
 
-void Connection::cancel()
-{
-    socket.cancel();
-}
-
 void Connection::close()
 {
     socket.close();
+}
+
+void Connection::listen()
+{
+    auto self(shared_from_this());
+    boost::asio::async_read_until(socket, buffer, DELIMITER,
+        [this, self] (const boost::system::error_code& err, size_t bytes_transferred)
+        {
+            handler(self, err);
+
+            if (!err)
+            {
+                listen(handler);
+            }
+        });
 }

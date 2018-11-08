@@ -33,7 +33,6 @@ void Network::Lobby::join(Connection::pointer connection)
 void Network::Lobby::leave(Connection::pointer connection)
 {
     connections.erase(connection);
-    connection->cancel();
 }
 
 void Network::Lobby::disconnect(Network::Connection::pointer connection)

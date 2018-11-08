@@ -55,7 +55,17 @@ void Network::Server::logLobby()
     BOOST_LOG_TRIVIAL(info) << "Lobby: " << lobby.size() << " connection(s)";
 }
 
-void Network::Server::moveConnection(Network::Connection::pointer connection, Network::Lobby* source, Network::Lobby* destination)
+void Network::Server::beginQueue(Network::Connection::pointer connection)
+{
+    moveConnection(connection, &queue, &lobby);
+}
+
+void Network::Server::cancelQueue(Network::Connection::pointer connection)
+{
+    moveConnection(connection, &lobby, &queue);
+}
+
+static const void Network::moveConnection(Network::Connection::pointer connection, Network::Lobby* source, Network::Lobby* destination)
 {
     source->leave(connection);
     destination->join(connection);
