@@ -9,7 +9,7 @@
 #include <boost/log/trivial.hpp>
 
 Network::Lobby::Lobby(Network::Server* server, Network::handlerFunction handler): server(server),
-                                                                              handler(std::move(handler))
+                                                                                  handler(std::move(handler))
 {}
 
 void Network::Lobby::join(Connection::pointer connection)
