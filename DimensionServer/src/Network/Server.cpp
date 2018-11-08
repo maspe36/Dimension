@@ -29,7 +29,7 @@ void Network::Server::listen()
         {
             if (!err)
             {
-                BOOST_LOG_TRIVIAL(info) << "Connection from: " << connection->getAddress();
+                connection->logConnect();
                 lobby.join(connection);
 
                 listen();
@@ -52,7 +52,8 @@ void Network::Server::logStatus()
 
 void Network::Server::logLobby()
 {
-    BOOST_LOG_TRIVIAL(info) << "Lobby: " << lobby.size() << " connection(s)";
+    BOOST_LOG_TRIVIAL(info) << "Menu Lobby: " << lobby.size() << " connection(s)";
+    BOOST_LOG_TRIVIAL(info) << "Queue Lobby: " << queue.size() << " connection(s)";
 }
 
 void Network::Server::beginQueue(Network::Connection::pointer connection)
@@ -65,7 +66,7 @@ void Network::Server::cancelQueue(Network::Connection::pointer connection)
     moveConnection(connection, &lobby, &queue);
 }
 
-static const void Network::moveConnection(Network::Connection::pointer connection, Network::Lobby* source, Network::Lobby* destination)
+static const void Network::moveConnection(Network::Connection::pointer& connection, Network::Lobby* source, Network::Lobby* destination)
 {
     source->leave(connection);
     destination->join(connection);

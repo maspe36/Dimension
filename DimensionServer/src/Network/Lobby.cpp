@@ -20,7 +20,7 @@ void Network::Lobby::join(Connection::pointer connection)
             {
                 if (err)
                 {
-                    BOOST_LOG_TRIVIAL(error) << connection->getAddress() << " disconnected (" << err.message() << ")";
+                    connection->logDisconnect(err);
                     disconnect(connection);
                 }
                 else

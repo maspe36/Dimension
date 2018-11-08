@@ -33,6 +33,9 @@ namespace Network
         void write(const std::string& data);
         void close();
 
+        void logConnect();
+        void logDisconnect(const boost::system::error_code& err);
+
     private:
         static const std::string DELIMITER;
 

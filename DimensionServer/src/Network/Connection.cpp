@@ -71,6 +71,16 @@ void Connection::close()
     socket.close();
 }
 
+void Connection::logConnect()
+{
+    BOOST_LOG_TRIVIAL(info) << "Connection from: " << getAddress() << " [" << this << "]";
+}
+
+void Connection::logDisconnect(const boost::system::error_code& err)
+{
+    BOOST_LOG_TRIVIAL(error) << getAddress() << " [" << this << "]" << " disconnected (" << err.message() << ")";
+}
+
 void Connection::listen()
 {
     auto self(shared_from_this());
