@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
         boost::asio::io_service ios;
 
         // Create the server which will create connection objects
-        Network::Server server(ios, 8080);
+        Dimension::Network::Server server(ios, 8080);
 
         // Spin up another thread for the IO Service to listen for incoming connections
         boost::thread io_thread(boost::bind(&boost::asio::io_service::run, &ios));

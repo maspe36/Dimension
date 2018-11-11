@@ -1,6 +1,6 @@
 project(DimensionServer_src)
 
-message(\nRunning src CMakeLists.txt)
+message("\nRunning src CMakeLists.txt")
 message(--------------------)
 
 set(project_files
@@ -27,4 +27,4 @@ find_package(Threads REQUIRED)
 # The main program
 add_executable(DimensionServer ${CMAKE_SOURCE_DIR}/src/main.cpp ${project_files})
 target_include_directories(DimensionServer PRIVATE ${Boost_INCLUDE_DIRS} ${LIBPQXX_INCLUDE_DIRS})
-target_link_libraries(DimensionServer PRIVATE ${Boost_LIBRARIES} ${LIBPQXX_LIBRARY_DIRS} Threads::Threads catch2 json pybind11)
+target_link_libraries(DimensionServer PRIVATE ${Boost_LIBRARIES} ${LIBPQXX_LIBRARY_DIRS} Threads::Threads catch2 json pybind11::embed)
