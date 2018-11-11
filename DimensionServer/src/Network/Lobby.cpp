@@ -8,11 +8,11 @@
 
 #include <boost/log/trivial.hpp>
 
-Network::Lobby::Lobby(Network::Server* server, Network::handlerFunction handler): server(server),
-                                                                                  handler(std::move(handler))
+Dimension::Network::Lobby::Lobby(Network::Server* server, Network::handlerFunction handler): server(server),
+                                                                                             handler(std::move(handler))
 {}
 
-void Network::Lobby::join(Connection::pointer connection)
+void Dimension::Network::Lobby::join(Connection::pointer connection)
 {
     connections.insert(connection);
     connection->listen(
@@ -30,23 +30,23 @@ void Network::Lobby::join(Connection::pointer connection)
             });
 }
 
-void Network::Lobby::leave(Connection::pointer connection)
+void Dimension::Network::Lobby::leave(Connection::pointer connection)
 {
     connections.erase(connection);
 }
 
-void Network::Lobby::disconnect(Network::Connection::pointer connection)
+void Dimension::Network::Lobby::disconnect(Network::Connection::pointer connection)
 {
     connections.erase(connection);
     connection->close();
 }
 
-bool Network::Lobby::contains(Network::Connection::pointer connection)
+bool Dimension::Network::Lobby::contains(Network::Connection::pointer connection)
 {
     return connections.find(connection) != connections.end();
 }
 
-size_t Network::Lobby::size()
+size_t Dimension::Network::Lobby::size()
 {
     return connections.size();
 }

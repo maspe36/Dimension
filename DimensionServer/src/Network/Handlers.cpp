@@ -6,7 +6,7 @@
 #include "Server.hpp"
 #include <boost/log/trivial.hpp>
 
-const void Network::menuHandler(Network::Server* server, Network::Connection::pointer connection)
+const void Dimension::Network::menuHandler(Network::Server* server, Network::Connection::pointer connection)
 {
     connection->write("menuHandler");
 
@@ -19,7 +19,7 @@ const void Network::menuHandler(Network::Server* server, Network::Connection::po
     }
 }
 
-const void Network::queueHandler(Network::Server* server, std::shared_ptr<Network::Connection> connection)
+const void Dimension::Network::queueHandler(Network::Server* server, std::shared_ptr<Network::Connection> connection)
 {
     connection->write("queueHandler");
 

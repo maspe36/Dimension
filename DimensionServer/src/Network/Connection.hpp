@@ -11,40 +11,43 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
-namespace Network
+namespace Dimension
 {
-    using boost::asio::ip::tcp;
-
-    class Connection : public std::enable_shared_from_this<Connection>
+    namespace Network
     {
-    public:
-        using pointer = std::shared_ptr<Connection>;
-        using responseFunction = std::function<void(pointer, const boost::system::error_code&)>;
+        using boost::asio::ip::tcp;
 
-        explicit Connection(boost::asio::io_service& ios);
+        class Connection : public std::enable_shared_from_this<Connection>
+        {
+        public:
+            using pointer = std::shared_ptr<Connection>;
+            using responseFunction = std::function<void(pointer, const boost::system::error_code&)>;
 
-        std::string address;
+            explicit Connection(boost::asio::io_service& ios);
 
-        std::string getAddress();
-        tcp::socket& getSocket();
-        std::string readBuffer();
+            std::string address;
 
-        void listen(responseFunction handler);
-        void write(const std::string& data);
-        void close();
+            std::string getAddress();
+            tcp::socket& getSocket();
+            std::string readBuffer();
 
-        void logConnect();
-        void logDisconnect(const boost::system::error_code& err);
+            void listen(responseFunction handler);
+            void write(const std::string& data);
+            void close();
 
-    private:
-        static const std::string DELIMITER;
+            void logConnect();
+            void logDisconnect(const boost::system::error_code& err);
 
-        responseFunction handler;
-        tcp::socket socket;
-        boost::asio::streambuf buffer;
+        private:
+            static const std::string DELIMITER;
 
-        void listen();
-    };
+            responseFunction handler;
+            tcp::socket socket;
+            boost::asio::streambuf buffer;
+
+            void listen();
+        };
+    }
 }
 
 

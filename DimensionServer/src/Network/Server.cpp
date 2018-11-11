@@ -9,18 +9,18 @@
 #include <boost/log/trivial.hpp>
 
 
-Network::Server::Server(boost::asio::io_service &ios, unsigned short port) : ios(ios),
-                                                                             port(port),
-                                                                             ipAddress(getAddress()),
-                                                                             acceptor(ios, tcp::endpoint(tcp::v4(), port)),
-                                                                             lobby(this, Network::menuHandler),
-                                                                             queue(this, Network::queueHandler)
+Dimension::Network::Server::Server(boost::asio::io_service &ios, unsigned short port) : ios(ios),
+                                                                                        port(port),
+                                                                                        ipAddress(getAddress()),
+                                                                                        acceptor(ios, tcp::endpoint(tcp::v4(), port)),
+                                                                                        lobby(this, Network::menuHandler),
+                                                                                        queue(this, Network::queueHandler)
 {
     listen();
     logStatus();
 }
 
-void Network::Server::listen()
+void Dimension::Network::Server::listen()
 {
     std::shared_ptr<Connection> connection = std::make_shared<Connection>(ios);
     acceptor.async_accept(
@@ -42,7 +42,7 @@ void Network::Server::listen()
         });
 }
 
-void Network::Server::logStatus()
+void Dimension::Network::Server::logStatus()
 {
     BOOST_LOG_TRIVIAL(info) << "Server started";
     BOOST_LOG_TRIVIAL(info) << "IP: " << getAddress();
@@ -50,29 +50,29 @@ void Network::Server::logStatus()
     BOOST_LOG_TRIVIAL(info) << "Listening...";
 }
 
-void Network::Server::logLobby()
+void Dimension::Network::Server::logLobby()
 {
     BOOST_LOG_TRIVIAL(info) << "Menu Lobby: " << lobby.size() << " connection(s)";
     BOOST_LOG_TRIVIAL(info) << "Queue Lobby: " << queue.size() << " connection(s)";
 }
 
-void Network::Server::beginQueue(Network::Connection::pointer connection)
+void Dimension::Network::Server::beginQueue(Network::Connection::pointer connection)
 {
     moveConnection(connection, &queue, &lobby);
 }
 
-void Network::Server::cancelQueue(Network::Connection::pointer connection)
+void Dimension::Network::Server::cancelQueue(Network::Connection::pointer connection)
 {
     moveConnection(connection, &lobby, &queue);
 }
 
-static const void Network::moveConnection(Network::Connection::pointer& connection, Network::Lobby* source, Network::Lobby* destination)
+static const void Dimension::Network::moveConnection(Network::Connection::pointer& connection, Network::Lobby* source, Network::Lobby* destination)
 {
     source->leave(connection);
     destination->join(connection);
 }
 
-static const std::string Network::getAddress()
+static const std::string Dimension::Network::getAddress()
 {
     std::string defaultIPAddressValue = "Unable to get IP Address";
     std::string ipAddress = defaultIPAddressValue;

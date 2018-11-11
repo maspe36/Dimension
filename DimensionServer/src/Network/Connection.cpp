@@ -9,15 +9,13 @@
 #include <boost/log/trivial.hpp>
 
 
-using namespace Network;
+const std::string Dimension::Network::Connection::DELIMITER = "\n";
 
-const std::string Connection::DELIMITER = "\n";
-
-Network::Connection::Connection(boost::asio::io_service &ios) : socket(ios)
+Dimension::Network::Connection::Connection(boost::asio::io_service &ios) : socket(ios)
 {
 }
 
-std::string Connection::getAddress()
+std::string Dimension::Network::Connection::getAddress()
 {
     if (address.empty())
     {
@@ -27,12 +25,12 @@ std::string Connection::getAddress()
     return address;
 }
 
-tcp::socket& Network::Connection::getSocket()
+boost::asio::ip::tcp::socket& Dimension::Network::Connection::getSocket()
 {
     return socket;
 }
 
-std::string Connection::readBuffer()
+std::string Dimension::Network::Connection::readBuffer()
 {
     boost::asio::streambuf::const_buffers_type bufs = buffer.data();
     std::string data(
@@ -46,13 +44,13 @@ std::string Connection::readBuffer()
     return data.substr(0, data.size() - 1);
 }
 
-void Connection::listen(responseFunction handler)
+void Dimension::Network::Connection::listen(responseFunction handler)
 {
     this->handler = std::move(handler);
     listen();
 }
 
-void Connection::write(const std::string& data)
+void Dimension::Network::Connection::write(const std::string& data)
 {
     auto finalData = data + DELIMITER;
 
@@ -66,22 +64,22 @@ void Connection::write(const std::string& data)
         });
 }
 
-void Connection::close()
+void Dimension::Network::Connection::close()
 {
     socket.close();
 }
 
-void Connection::logConnect()
+void Dimension::Network::Connection::logConnect()
 {
     BOOST_LOG_TRIVIAL(info) << "Connection from: " << getAddress() << " [" << this << "]";
 }
 
-void Connection::logDisconnect(const boost::system::error_code& err)
+void Dimension::Network::Connection::logDisconnect(const boost::system::error_code& err)
 {
     BOOST_LOG_TRIVIAL(error) << getAddress() << " [" << this << "]" << " disconnected (" << err.message() << ")";
 }
 
-void Connection::listen()
+void Dimension::Network::Connection::listen()
 {
     auto self(shared_from_this());
     boost::asio::async_read_until(socket, buffer, DELIMITER,

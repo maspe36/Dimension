@@ -9,29 +9,32 @@
 #include "Connection.hpp"
 #include <set>
 
-namespace Network
+namespace Dimension
 {
-    class Server;
-
-    using handlerFunction = std::function<void(Server*, Connection::pointer)>;
-
-    class Lobby
+    namespace Network
     {
-    public:
-        Lobby(Server* server, handlerFunction handler);
+        class Server;
 
-        void join(Connection::pointer connection);
-        void leave(Connection::pointer connection);
-        void disconnect(Connection::pointer connection);
-        bool contains(Connection::pointer connection);
+        using handlerFunction = std::function<void(Server*, Connection::pointer)>;
 
-        size_t size();
+        class Lobby
+        {
+        public:
+            Lobby(Server* server, handlerFunction handler);
 
-    private:
-        std::set<Connection::pointer> connections;
-        Server* server;
-        handlerFunction handler;
-    };
+            void join(Connection::pointer connection);
+            void leave(Connection::pointer connection);
+            void disconnect(Connection::pointer connection);
+            bool contains(Connection::pointer connection);
+
+            size_t size();
+
+        private:
+            std::set<Connection::pointer> connections;
+            Server* server;
+            handlerFunction handler;
+        };
+    }
 }
 
 

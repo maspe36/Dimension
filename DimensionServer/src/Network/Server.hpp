@@ -13,35 +13,38 @@
 #include "Connection.hpp"
 #include "Lobby.hpp"
 
-namespace Network
+namespace Dimension
 {
-    using boost::asio::ip::tcp;
-
-    class Server
+    namespace Network
     {
-    public:
-        Server(boost::asio::io_service& ios, unsigned short port);
+        using boost::asio::ip::tcp;
 
-        void listen();
-        void logStatus();
-        void logLobby();
+        class Server
+        {
+        public:
+            Server(boost::asio::io_service& ios, unsigned short port);
 
-        void beginQueue(Connection::pointer connection);
-        void cancelQueue(Connection::pointer connection);
+            void listen();
+            void logStatus();
+            void logLobby();
 
-    private:
-        Lobby lobby;
-        Lobby queue;
+            void beginQueue(Connection::pointer connection);
+            void cancelQueue(Connection::pointer connection);
 
-        unsigned short port;
-        std::string ipAddress;
+        private:
+            Lobby lobby;
+            Lobby queue;
 
-        boost::asio::io_service& ios;
-        tcp::acceptor acceptor;
-    };
+            unsigned short port;
+            std::string ipAddress;
 
-    static const void moveConnection(Connection::pointer& connection, Lobby* source, Lobby* destination);
-    static const std::string getAddress();
+            boost::asio::io_service& ios;
+            tcp::acceptor acceptor;
+        };
+
+        static const void moveConnection(Connection::pointer& connection, Lobby* source, Lobby* destination);
+        static const std::string getAddress();
+    }
 }
 
 
