@@ -4,6 +4,8 @@ message(\nRunning src CMakeLists.txt)
 message(--------------------)
 
 set(project_files
+        ${CMAKE_SOURCE_DIR}/src/Game/Card.cpp
+        ${CMAKE_SOURCE_DIR}/src/Game/Card.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Connection.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Connection.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Handlers.cpp
