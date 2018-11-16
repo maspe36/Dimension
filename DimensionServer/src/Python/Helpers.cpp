@@ -9,12 +9,16 @@
 
 namespace py = pybind11;
 
+pybind11::object getPythonInstance(const std::string &name)
+{
+    return pybind11::module::import("__main__").attr(name.c_str())();
+}
+
 Dimension::Game::Card::pointer Dimension::Python::createCard(const std::string& name, const std::string& script)
 {
     py::exec(script);
-    py::module scope = py::module::import("__main__");
-    auto pyCard = scope.attr(name.c_str())();
-    return pyCard.cast<std::shared_ptr<Game::Card>>();
+    auto pyCard = getPythonInstance(name);
+    return pyCard.cast<Dimension::Game::Card::pointer>();
 }
 
 void Dimension::Python::configurePythonPath()
