@@ -16,6 +16,8 @@ set(project_files
         ${CMAKE_SOURCE_DIR}/src/Network/Lobby.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Server.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Server.hpp
+        ${CMAKE_SOURCE_DIR}/src/Python/Helpers.cpp
+        ${CMAKE_SOURCE_DIR}/src/Python/Helpers.hpp
         CACHE INTERNAL "")
 
 find_package(Threads REQUIRED)

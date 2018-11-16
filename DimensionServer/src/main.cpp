@@ -2,11 +2,21 @@
 #include <boost/thread.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/log/trivial.hpp>
+#include <pybind11/embed.h>
 #include "Network/Server.hpp"
+#include "Python/Helpers.hpp"
+
+namespace py = pybind11;
 
 int main(int argc, char *argv[])
 {
     try {
+        // Create the scoped interpreter
+        py::scoped_interpreter guard{};
+
+        // Setup python environment
+        Dimension::Python::configurePythonPath();
+
         // Create the IO Service
         boost::asio::io_service ios;
 

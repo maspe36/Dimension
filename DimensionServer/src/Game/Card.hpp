@@ -15,6 +15,8 @@ namespace Dimension
         class Card : public std::enable_shared_from_this<Card>
         {
         public:
+            using pointer = std::shared_ptr<Card>;
+
             std::string name;
 
             explicit Card(const std::string& name);

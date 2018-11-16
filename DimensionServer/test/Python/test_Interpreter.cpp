@@ -26,7 +26,7 @@ TEST_CASE("Embedded interpreter")
 
             auto version = std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(micro);
 
-            CHECK(version == correctVersion);
+            REQUIRE(version == correctVersion);
         }
 
         SECTION("Import module")
