@@ -10,7 +10,7 @@ set(Boost_USE_STATIC_RUNTIME    OFF)
 find_package(Boost 1.58.0 REQUIRED system log)
 
 message("Adding libpqxx...")
-find_package(PostgreSQL 9.5.12 REQUIRED)
+find_package(PostgreSQL 10 REQUIRED)
 find_package(libpqxx REQUIRED)
 
 message("Adding Catch2...")
