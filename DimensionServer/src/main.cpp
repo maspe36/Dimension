@@ -2,9 +2,11 @@
 #include <boost/thread.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/log/trivial.hpp>
-#include <pybind11/embed.h>
+
 #include "Network/Server.hpp"
 #include "Python/Helpers.hpp"
+
+#include <pybind11/embed.h>
 
 namespace py = pybind11;
 
