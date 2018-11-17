@@ -21,11 +21,9 @@ TEST_CASE("Normal Helper Usage")
 
             REQUIRE(py::module::import("sys").attr("path").contains("../src/Python"));
 
-            SECTION("Create Example Card")
-            {
-                auto name = "Foo";
+            auto name = "Foo";
 
-                auto script = R"(
+            auto script = R"(
 from Game import Card
 
 class Foo(Card):
@@ -33,10 +31,22 @@ class Foo(Card):
         super().__init__(name)
             )";
 
+            SECTION("Create Example Card")
+            {
                 auto card = Dimension::Python::createCard(name, script);
 
                 REQUIRE(card != nullptr);
                 REQUIRE(card->name == name);
+            }
+
+            SECTION("Multiple Card Benchmark")
+            {
+                int n = 1000;
+
+                for (int i = 0; i < n; i++)
+                {
+                    Dimension::Python::createCard(name, script);
+                }
             }
         }
     }
