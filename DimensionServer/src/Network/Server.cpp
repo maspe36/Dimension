@@ -58,18 +58,18 @@ void Dimension::Network::Server::logLobby()
 
 void Dimension::Network::Server::beginQueue(Network::Connection::pointer connection)
 {
-    moveConnection(connection, &queue, &lobby);
+    moveConnection(connection, lobby, queue);
 }
 
 void Dimension::Network::Server::cancelQueue(Network::Connection::pointer connection)
 {
-    moveConnection(connection, &lobby, &queue);
+    moveConnection(connection, queue, lobby);
 }
 
-static const void Dimension::Network::moveConnection(Network::Connection::pointer& connection, Network::Lobby* source, Network::Lobby* destination)
+static const void Dimension::Network::moveConnection(Network::Connection::pointer& connection, Network::Lobby& source, Network::Lobby& destination)
 {
-    source->leave(connection);
-    destination->join(connection);
+    source.leave(connection);
+    destination.join(connection);
 }
 
 static const std::string Dimension::Network::getAddress()
