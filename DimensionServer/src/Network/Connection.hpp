@@ -25,6 +25,8 @@ namespace Dimension
 
             explicit Connection(boost::asio::io_service& ios);
 
+            static const std::string LINE_FEED;
+            static const std::string CARRIAGE_RETURN;
             std::string address;
 
             std::string getAddress();
@@ -39,14 +41,14 @@ namespace Dimension
             void logDisconnect(const boost::system::error_code& err);
 
         private:
-            static const std::string DELIMITER;
-
             responseFunction handler;
             tcp::socket socket;
             boost::asio::streambuf buffer;
 
             void listen();
         };
+
+        std::string sanitize(const std::string &data);
     }
 }
 

@@ -9,7 +9,8 @@
 #include <boost/log/trivial.hpp>
 
 
-const std::string Dimension::Network::Connection::DELIMITER = "\n";
+const std::string Dimension::Network::Connection::LINE_FEED = "\n";
+const std::string Dimension::Network::Connection::CARRIAGE_RETURN = "\r";
 
 Dimension::Network::Connection::Connection(boost::asio::io_service &ios) : socket(ios)
 {
@@ -40,8 +41,8 @@ std::string Dimension::Network::Connection::readBuffer()
     // Empty the buffer
     buffer.consume(buffer.size());
 
-    // Return everything except the 'DELIMITER'
-    return data.substr(0, data.size() - 1);
+    // Return everything except the 'LINE_FEED'
+    return Dimension::Network::sanitize(data);
 }
 
 void Dimension::Network::Connection::listen(responseFunction handler)
@@ -52,7 +53,7 @@ void Dimension::Network::Connection::listen(responseFunction handler)
 
 void Dimension::Network::Connection::write(const std::string& data)
 {
-    auto finalData = data + DELIMITER;
+    auto finalData = data + LINE_FEED;
 
     boost::asio::async_write(socket, boost::asio::buffer(finalData.c_str(), finalData.size()),
         [data, this](const boost::system::error_code& err, size_t bytes_transferred)
@@ -82,7 +83,7 @@ void Dimension::Network::Connection::logDisconnect(const boost::system::error_co
 void Dimension::Network::Connection::listen()
 {
     auto self(shared_from_this());
-    boost::asio::async_read_until(socket, buffer, DELIMITER,
+    boost::asio::async_read_until(socket, buffer, LINE_FEED,
         [this, self] (const boost::system::error_code& err, size_t bytes_transferred)
         {
             handler(self, err);
@@ -92,4 +93,19 @@ void Dimension::Network::Connection::listen()
                 listen(handler);
             }
         });
+}
+
+std::string Dimension::Network::sanitize(std::string const &data)
+{
+    std::string sanitized = data;
+    char ending = sanitized.at(sanitized.size() - 1);
+
+    while (ending == Dimension::Network::Connection::LINE_FEED.at(0) or
+           ending == Dimension::Network::Connection::CARRIAGE_RETURN.at(0))
+    {
+        sanitized = sanitized.substr(0, sanitized.size() - 1);
+        ending = sanitized.at(sanitized.size() - 1);
+    }
+
+    return sanitized;
 }
