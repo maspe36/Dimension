@@ -8,15 +8,17 @@
 
 #include <boost/log/trivial.hpp>
 
-Dimension::Network::Lobby::Lobby(Network::Server* server, Network::handlerFunction handler): server(server),
-                                                                                             handler(std::move(handler))
+template <typename T>
+Dimension::Network::Lobby<T>::Lobby(Server* server, handlerFunction handler): server(server),
+                                                                              handler(std::move(handler))
 {}
 
-void Dimension::Network::Lobby::join(Connection::pointer connection)
+template <typename T>
+void Dimension::Network::Lobby<T>::join(pointer connection)
 {
-    connections.insert(connection);
-    connection->listen(
-            [=] (Network::Connection::pointer connection, const boost::system::error_code& err)
+    connections.push_back(connection);
+    connection->template listen<pointer>(
+            [=] (pointer connection, const boost::system::error_code& err)
             {
                 if (err)
                 {
@@ -30,23 +32,29 @@ void Dimension::Network::Lobby::join(Connection::pointer connection)
             });
 }
 
-void Dimension::Network::Lobby::leave(Connection::pointer connection)
+template <typename T>
+void Dimension::Network::Lobby<T>::leave(pointer connection)
 {
-    connections.erase(connection);
+    connections.erase(std::remove(begin(connections), end(connections), connection), end(connections));
 }
 
-void Dimension::Network::Lobby::disconnect(Network::Connection::pointer connection)
+template <typename T>
+void Dimension::Network::Lobby<T>::disconnect(pointer connection)
 {
-    connections.erase(connection);
+    connections.erase(std::remove(begin(connections), end(connections), connection), end(connections));
     connection->close();
 }
 
-bool Dimension::Network::Lobby::contains(Network::Connection::pointer connection)
+template <typename T>
+bool Dimension::Network::Lobby<T>::contains(pointer connection)
 {
-    return connections.find(connection) != connections.end();
+    return std::find(connections.begin(), connections.end(), connection) != connections.end();
 }
 
-size_t Dimension::Network::Lobby::size()
+template <typename T>
+size_t Dimension::Network::Lobby<T>::size()
 {
     return connections.size();
 }
+
+template class Dimension::Network::Lobby<Dimension::Network::Connection>;

@@ -56,20 +56,20 @@ void Dimension::Network::Server::logLobby()
     BOOST_LOG_TRIVIAL(info) << "Queue Lobby: " << queue.size() << " connection(s)";
 }
 
-void Dimension::Network::Server::beginQueue(Network::Connection::pointer connection)
+void Dimension::Network::Server::beginQueue(Connection::pointer connection)
 {
-    moveConnection(connection, lobby, queue);
+    lobby.leave(connection);
+    queue.join(connection);
+    assert(!lobby.contains(connection));
+    assert(queue.contains(connection));
 }
 
-void Dimension::Network::Server::cancelQueue(Network::Connection::pointer connection)
+void Dimension::Network::Server::cancelQueue(Connection::pointer connection)
 {
-    moveConnection(connection, queue, lobby);
-}
-
-static const void Dimension::Network::moveConnection(Network::Connection::pointer& connection, Network::Lobby& source, Network::Lobby& destination)
-{
-    source.leave(connection);
-    destination.join(connection);
+    queue.leave(connection);
+    lobby.join(connection);
+    assert(!queue.contains(connection));
+    assert(lobby.contains(connection));
 }
 
 static const std::string Dimension::Network::getAddress()

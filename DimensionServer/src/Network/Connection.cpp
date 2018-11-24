@@ -45,12 +45,6 @@ std::string Dimension::Network::Connection::readBuffer()
     return Dimension::Network::sanitize(data);
 }
 
-void Dimension::Network::Connection::listen(responseFunction handler)
-{
-    this->handler = std::move(handler);
-    listen();
-}
-
 void Dimension::Network::Connection::write(const std::string& data)
 {
     auto finalData = data + LINE_FEED;
@@ -78,21 +72,6 @@ void Dimension::Network::Connection::logConnect()
 void Dimension::Network::Connection::logDisconnect(const boost::system::error_code& err)
 {
     BOOST_LOG_TRIVIAL(error) << getAddress() << " [" << this << "]" << " disconnected (" << err.message() << ")";
-}
-
-void Dimension::Network::Connection::listen()
-{
-    auto self(shared_from_this());
-    boost::asio::async_read_until(socket, buffer, LINE_FEED,
-        [this, self] (const boost::system::error_code& err, size_t bytes_transferred)
-        {
-            handler(self, err);
-
-            if (!err)
-            {
-                listen(handler);
-            }
-        });
 }
 
 std::string Dimension::Network::sanitize(std::string const &data)

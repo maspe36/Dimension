@@ -15,22 +15,24 @@ namespace Dimension
     {
         class Server;
 
-        using handlerFunction = std::function<void(Server*, Connection::pointer)>;
-
+        template <typename T>
         class Lobby
         {
         public:
+            using pointer = std::shared_ptr<T>;
+            using handlerFunction = std::function<void(Server*, pointer)>;
+
             Lobby(Server* server, handlerFunction handler);
 
-            void join(Connection::pointer connection);
-            void leave(Connection::pointer connection);
-            void disconnect(Connection::pointer connection);
-            bool contains(Connection::pointer connection);
+            void join(pointer connection);
+            void leave(pointer connection);
+            void disconnect(pointer connection);
+            bool contains(pointer connection);
 
             size_t size();
 
         private:
-            std::set<Connection::pointer> connections;
+            std::vector<pointer> connections;
             Server* server;
             handlerFunction handler;
         };

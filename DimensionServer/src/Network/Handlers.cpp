@@ -17,6 +17,12 @@ const void Dimension::Network::menuHandler(Network::Server* server, Network::Con
         server->beginQueue(connection);
         connection->write("queueing...");
     }
+
+    if (data == "test")
+    {
+        server->cancelQueue(connection);
+        connection->write("queue successfully left");
+    }
 }
 
 const void Dimension::Network::queueHandler(Network::Server* server, std::shared_ptr<Network::Connection> connection)

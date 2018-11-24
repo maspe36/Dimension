@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <memory>
+#include <any>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
@@ -21,7 +22,6 @@ namespace Dimension
         {
         public:
             using pointer = std::shared_ptr<Connection>;
-            using responseFunction = std::function<void(pointer, const boost::system::error_code&)>;
 
             explicit Connection(boost::asio::io_service& ios);
 
@@ -33,7 +33,13 @@ namespace Dimension
             tcp::socket& getSocket();
             std::string readBuffer();
 
-            void listen(responseFunction handler);
+            template <typename pointer>
+            void listen(std::function<void(pointer, const boost::system::error_code&)> lobbyLambdaHandler)
+            {
+                this->lobbyLambdaHandler = std::move(lobbyLambdaHandler);
+                listen<pointer>();
+            }
+
             void write(const std::string& data);
             void close();
 
@@ -41,11 +47,27 @@ namespace Dimension
             void logDisconnect(const boost::system::error_code& err);
 
         private:
-            responseFunction handler;
+            std::any lobbyLambdaHandler;
             tcp::socket socket;
             boost::asio::streambuf buffer;
 
-            void listen();
+            template <typename pointer>
+            void listen()
+            {
+                auto self(shared_from_this());
+                boost::asio::async_read_until(socket, buffer, LINE_FEED,
+                [this, self] (const boost::system::error_code& err, size_t bytes_transferred)
+                {
+                    using LobbyLambdaType = std::function<void(pointer, const boost::system::error_code&)>;
+                    auto castHandler = std::any_cast<LobbyLambdaType>(lobbyLambdaHandler);
+                    castHandler(self, err);
+
+                    if (!err)
+                    {
+                        listen<pointer>(castHandler);
+                    }
+                });
+            }
         };
 
         std::string sanitize(const std::string &data);

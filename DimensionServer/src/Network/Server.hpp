@@ -32,8 +32,8 @@ namespace Dimension
             void cancelQueue(Connection::pointer connection);
 
         private:
-            Lobby lobby;
-            Lobby queue;
+            Lobby<Connection> lobby;
+            Lobby<Connection> queue;
 
             unsigned short port;
             std::string ipAddress;
@@ -42,7 +42,6 @@ namespace Dimension
             tcp::acceptor acceptor;
         };
 
-        static const void moveConnection(Connection::pointer& connection, Lobby& source, Lobby& destination);
         static const std::string getAddress();
     }
 }
