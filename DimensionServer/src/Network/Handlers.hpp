@@ -13,10 +13,12 @@ namespace Dimension
     namespace Network
     {
         class Server;
+        class Client;
         class Connection;
 
-        const void menuHandler(Network::Server* server, std::shared_ptr<Connection> connection);
-        const void queueHandler(Network::Server* server, std::shared_ptr<Connection> connection);
+        const void connectionToClientHandler(Server* server, std::shared_ptr<Connection> connection);
+        const void menuHandler(Server* server, std::shared_ptr<Client> client);
+        const void queueHandler(Server* server, std::shared_ptr<Client> client);
     }
 }
 

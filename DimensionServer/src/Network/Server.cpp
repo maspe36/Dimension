@@ -13,6 +13,7 @@ Dimension::Network::Server::Server(boost::asio::io_service &ios, unsigned short 
                                                                                         port(port),
                                                                                         ipAddress(getAddress()),
                                                                                         acceptor(ios, tcp::endpoint(tcp::v4(), port)),
+                                                                                        waitingRoom(this, Network::connectionToClientHandler),
                                                                                         lobby(this, Network::menuHandler),
                                                                                         queue(this, Network::queueHandler)
 {
@@ -30,7 +31,7 @@ void Dimension::Network::Server::listen()
             if (!err)
             {
                 connection->logConnect();
-                lobby.join(connection);
+                waitingRoom.join(connection);
 
                 listen();
             }
@@ -56,20 +57,23 @@ void Dimension::Network::Server::logLobby()
     BOOST_LOG_TRIVIAL(info) << "Queue Lobby: " << queue.size() << " connection(s)";
 }
 
-void Dimension::Network::Server::beginQueue(Connection::pointer connection)
+void Dimension::Network::Server::joinLobby(Connection::pointer connection)
 {
-    lobby.leave(connection);
-    queue.join(connection);
-    assert(!lobby.contains(connection));
-    assert(queue.contains(connection));
+    waitingRoom.leave(connection);
+    auto client = std::make_shared<Client>(connection);
+    lobby.join(client);
 }
 
-void Dimension::Network::Server::cancelQueue(Connection::pointer connection)
+void Dimension::Network::Server::beginQueue(Client::pointer client)
 {
-    queue.leave(connection);
-    lobby.join(connection);
-    assert(!queue.contains(connection));
-    assert(lobby.contains(connection));
+    lobby.leave(client);
+    queue.join(client);
+}
+
+void Dimension::Network::Server::cancelQueue(Client::pointer client)
+{
+    queue.leave(client);
+    lobby.join(client);
 }
 
 static const std::string Dimension::Network::getAddress()

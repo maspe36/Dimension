@@ -4,37 +4,45 @@
 
 #include "Handlers.hpp"
 #include "Server.hpp"
+#include "Client.hpp"
 #include <boost/log/trivial.hpp>
 
-const void Dimension::Network::menuHandler(Network::Server* server, Network::Connection::pointer connection)
+const void Dimension::Network::connectionToClientHandler(Server* server, Connection::pointer connection)
 {
-    connection->write("menuHandler");
+    connection->write("connectionToClientHandler");
 
     std::string data = connection->readBuffer();
 
-    if (data == "queue")
+    if (data == "join")
     {
-        server->beginQueue(connection);
-        connection->write("queueing...");
-    }
-
-    if (data == "test")
-    {
-        server->cancelQueue(connection);
-        connection->write("queue successfully left");
+        server->joinLobby(connection);
+        connection->write("joining lobby...");
     }
 }
 
-const void Dimension::Network::queueHandler(Network::Server* server, std::shared_ptr<Network::Connection> connection)
+const void Dimension::Network::menuHandler(Server* server, Client::pointer client)
 {
-    connection->write("queueHandler");
+    client->write("menuHandler");
 
-    std::string data = connection->readBuffer();
-    connection->write(data);
+    std::string data = client->connection->readBuffer();
+
+    if (data == "queue")
+    {
+        server->beginQueue(client);
+        client->write("queueing...");
+    }
+}
+
+const void Dimension::Network::queueHandler(Server* server, Client::pointer client)
+{
+    client->write("queueHandler");
+
+    std::string data = client->connection->readBuffer();
+    client->write(data);
 
     if (data == "cancel")
     {
-        server->cancelQueue(connection);
-        connection->write("returned to lobby");
+        server->cancelQueue(client);
+        client->write("returned to lobby");
     }
 }

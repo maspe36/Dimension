@@ -1,10 +1,13 @@
 #include <utility>
 
+#include <utility>
+
 //
 // Created by Sam on 10/26/2018.
 //
 
 #include "Connection.hpp"
+#include "Client.hpp"
 
 #include <boost/log/trivial.hpp>
 
@@ -45,6 +48,13 @@ std::string Dimension::Network::Connection::readBuffer()
     return Dimension::Network::sanitize(data);
 }
 
+void Dimension::Network::Connection::listen(const variantPointer& newCaller, const responseFunction& newLobbyLambdaHandler)
+{
+    lobbyLambdaHandler = newLobbyLambdaHandler;
+    caller = newCaller;
+    listen();
+}
+
 void Dimension::Network::Connection::write(const std::string& data)
 {
     auto finalData = data + LINE_FEED;
@@ -72,6 +82,24 @@ void Dimension::Network::Connection::logConnect()
 void Dimension::Network::Connection::logDisconnect(const boost::system::error_code& err)
 {
     BOOST_LOG_TRIVIAL(error) << getAddress() << " [" << this << "]" << " disconnected (" << err.message() << ")";
+}
+
+void Dimension::Network::Connection::listen()
+{
+    auto self(shared_from_this());
+    boost::asio::async_read_until(socket, buffer, LINE_FEED,
+        [this, self] (const boost::system::error_code& err, size_t bytes_transferred)
+        {
+            std::visit(overloaded {
+                [=](clientResponseFunction func) { func(std::get<Client::pointer>(caller), err); },
+                [=](connectionResponseFunction func) { func(std::get<Connection::pointer>(caller), err); },
+            }, lobbyLambdaHandler);
+
+            if (!err)
+            {
+                listen(caller, lobbyLambdaHandler);
+            }
+        });
 }
 
 std::string Dimension::Network::sanitize(std::string const &data)

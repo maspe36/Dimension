@@ -10,6 +10,7 @@
 #include <memory>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
+#include "Client.hpp"
 #include "Connection.hpp"
 #include "Lobby.hpp"
 
@@ -28,12 +29,14 @@ namespace Dimension
             void logStatus();
             void logLobby();
 
-            void beginQueue(Connection::pointer connection);
-            void cancelQueue(Connection::pointer connection);
+            void joinLobby(Connection::pointer connection);
+            void beginQueue(Client::pointer client);
+            void cancelQueue(Client::pointer client);
 
         private:
-            Lobby<Connection> lobby;
-            Lobby<Connection> queue;
+            Lobby<Connection> waitingRoom;
+            Lobby<Client> lobby;
+            Lobby<Client> queue;
 
             unsigned short port;
             std::string ipAddress;

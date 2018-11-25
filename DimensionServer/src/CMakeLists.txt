@@ -8,12 +8,15 @@ add_subdirectory(Python)
 set(project_files
         ${CMAKE_SOURCE_DIR}/src/Game/Card.cpp
         ${CMAKE_SOURCE_DIR}/src/Game/Card.hpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Client.cpp
+        ${CMAKE_SOURCE_DIR}/src/Network/Client.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Connection.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Connection.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Handlers.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Handlers.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Lobby.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Lobby.hpp
+        ${CMAKE_SOURCE_DIR}/src/Network/LobbyLambdaCaller.hpp
         ${CMAKE_SOURCE_DIR}/src/Network/Server.cpp
         ${CMAKE_SOURCE_DIR}/src/Network/Server.hpp
         ${CMAKE_SOURCE_DIR}/src/Python/Helpers.cpp

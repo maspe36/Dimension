@@ -5,6 +5,7 @@
 //
 
 #include "Lobby.hpp"
+#include "Client.hpp"
 
 #include <boost/log/trivial.hpp>
 
@@ -17,19 +18,19 @@ template <typename T>
 void Dimension::Network::Lobby<T>::join(pointer connection)
 {
     connections.push_back(connection);
-    connection->template listen<pointer>(
-            [=] (pointer connection, const boost::system::error_code& err)
+    connection->listen(connection,
+        [=] (pointer connection, const boost::system::error_code& err)
+        {
+            if (err)
             {
-                if (err)
-                {
-                    connection->logDisconnect(err);
-                    disconnect(connection);
-                }
-                else
-                {
-                    handler(server, connection);
-                }
-            });
+                connection->logDisconnect(err);
+                disconnect(connection);
+            }
+            else
+            {
+                handler(server, connection);
+            }
+        });
 }
 
 template <typename T>
@@ -58,3 +59,4 @@ size_t Dimension::Network::Lobby<T>::size()
 }
 
 template class Dimension::Network::Lobby<Dimension::Network::Connection>;
+template class Dimension::Network::Lobby<Dimension::Network::Client>;
