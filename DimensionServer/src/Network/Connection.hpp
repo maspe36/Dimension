@@ -34,9 +34,9 @@ namespace Dimension
             std::string readBuffer();
 
             template <typename pointer>
-            void listen(std::function<void(pointer, const boost::system::error_code&)> lobbyLambdaHandler)
+            void listen(std::function<void(pointer, const boost::system::error_code&)> newLobbyLambdaHandler)
             {
-                this->lobbyLambdaHandler = std::move(lobbyLambdaHandler);
+                lobbyLambdaHandler = newLobbyLambdaHandler;
                 listen<pointer>();
             }
 
@@ -64,6 +64,7 @@ namespace Dimension
 
                     if (!err)
                     {
+                        castHandler = std::any_cast<LobbyLambdaType>(lobbyLambdaHandler);
                         listen<pointer>(castHandler);
                     }
                 });
