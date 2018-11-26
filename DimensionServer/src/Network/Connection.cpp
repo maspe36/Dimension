@@ -48,9 +48,9 @@ std::string Dimension::Network::Connection::readBuffer()
     return Dimension::Network::sanitize(data);
 }
 
-void Dimension::Network::Connection::listen(const variantPointer& newCaller, const responseFunction& newLobbyLambdaHandler)
+void Dimension::Network::Connection::listen(const variantPointer& newCaller, const variantFunction& newLobbyLambda)
 {
-    lobbyLambdaHandler = newLobbyLambdaHandler;
+    lobbyLambda = newLobbyLambda;
     caller = newCaller;
     listen();
 }
@@ -91,13 +91,13 @@ void Dimension::Network::Connection::listen()
         [this, self] (const boost::system::error_code& err, size_t bytes_transferred)
         {
             std::visit(overloaded {
-                [=](clientResponseFunction func) { func(std::get<Client::pointer>(caller), err); },
-                [=](connectionResponseFunction func) { func(std::get<Connection::pointer>(caller), err); },
-            }, lobbyLambdaHandler);
+                [=](clientFunction func) { func(std::get<Client::pointer>(caller), err); },
+                [=](connectionFunction func) { func(std::get<Connection::pointer>(caller), err); },
+            }, lobbyLambda);
 
             if (!err)
             {
-                listen(caller, lobbyLambdaHandler);
+                listen(caller, lobbyLambda);
             }
         });
 }

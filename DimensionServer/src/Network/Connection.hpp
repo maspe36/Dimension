@@ -36,7 +36,7 @@ namespace Dimension
             tcp::socket& getSocket();
             std::string readBuffer();
 
-            void listen(const variantPointer& newCaller, const responseFunction& newLobbyLambdaHandler);
+            void listen(const variantPointer& newCaller, const variantFunction& newLobbyLambda);
 
             void write(const std::string& data);
             void close();
@@ -45,7 +45,7 @@ namespace Dimension
             void logDisconnect(const boost::system::error_code& err);
 
         private:
-            responseFunction lobbyLambdaHandler;
+            variantFunction lobbyLambda;
             variantPointer caller;
 
             tcp::socket socket;
