@@ -8,17 +8,6 @@ add_subdirectory(Python)
 set(project_files
         ${CMAKE_SOURCE_DIR}/src/Game/Card.cpp
         ${CMAKE_SOURCE_DIR}/src/Game/Card.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Client.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Client.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Connection.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Connection.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Handlers.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Handlers.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Lobby.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Lobby.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/ResponseFunctionHelper.hpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Server.cpp
-        ${CMAKE_SOURCE_DIR}/src/Network-TCP/Server.hpp
         ${CMAKE_SOURCE_DIR}/src/Python/Helpers.cpp
         ${CMAKE_SOURCE_DIR}/src/Python/Helpers.hpp
         CACHE INTERNAL "")
