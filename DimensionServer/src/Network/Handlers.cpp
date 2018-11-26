@@ -22,27 +22,27 @@ const void Dimension::Network::connectionToClientHandler(Server* server, Connect
 
 const void Dimension::Network::menuHandler(Server* server, Client::pointer client)
 {
-    client->write("menuHandler");
+    client->connection->write("menuHandler");
 
     std::string data = client->connection->readBuffer();
 
     if (data == "queue")
     {
         server->beginQueue(client);
-        client->write("queueing...");
+        client->connection->write("queueing...");
     }
 }
 
 const void Dimension::Network::queueHandler(Server* server, Client::pointer client)
 {
-    client->write("queueHandler");
+    client->connection->write("queueHandler");
 
     std::string data = client->connection->readBuffer();
-    client->write(data);
+    client->connection->write(data);
 
     if (data == "cancel")
     {
         server->cancelQueue(client);
-        client->write("returned to lobby");
+        client->connection->write("returned to lobby");
     }
 }

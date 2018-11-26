@@ -15,11 +15,6 @@ void Dimension::Network::Client::listen(const Client::pointer &self, const std::
     connection->listen(self, handler);
 }
 
-void Dimension::Network::Client::write(const std::string &data)
-{
-    connection->write(data);
-}
-
 void Dimension::Network::Client::close()
 {
     connection->close();

@@ -27,9 +27,6 @@ namespace Dimension
             std::shared_ptr<Connection> connection;
 
             void listen(const Client::pointer &self, const std::function<void(std::shared_ptr<Client>, const boost::system::error_code &)> &handler);
-
-            void write(const std::string &data);
-
             void close();
 
             void logDisconnect(const boost::system::error_code &err);
