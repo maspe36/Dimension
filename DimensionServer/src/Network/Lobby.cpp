@@ -21,6 +21,11 @@ void Dimension::Network::Lobby<T>::join(pointer connection)
     connection->listen(connection,
         [=] (pointer connection, const boost::system::error_code& err)
         {
+            if (!this->contains(connection))
+            {
+                return;
+            }
+
             if (err)
             {
                 connection->logDisconnect(err);
