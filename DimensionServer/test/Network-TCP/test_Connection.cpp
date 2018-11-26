@@ -4,7 +4,7 @@
 
 #include <catch.hpp>
 
-#include "../../src/Network/Connection.hpp"
+#include "../../src/Network-TCP/Connection.hpp"
 
 TEST_CASE("Sanitized Buffer Reading")
 {

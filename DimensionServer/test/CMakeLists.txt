@@ -7,7 +7,7 @@ set(test_files
         CatchMain.cpp
         Python/test_Interpreter.cpp
         Python/test_Helpers.cpp
-        Network/test_Connection.cpp)
+        Network-TCP/test_Connection.cpp)
 
 find_package(Threads REQUIRED)
 

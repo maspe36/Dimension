@@ -1,9 +1,9 @@
+#include <iostream>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/log/trivial.hpp>
 
-#include "Network/Server.hpp"
 #include "Python/Helpers.hpp"
 
 #include <pybind11/embed.h>
@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
         // Create the IO Service
         boost::asio::io_service ios;
 
-        // Create the server which will create connection objects
-        Dimension::Network::Server server(ios, 8080);
+        // Start UDP server
+
 
         // Spin up another thread for the IO Service to listen for incoming connections
         boost::thread io_thread(boost::bind(&boost::asio::io_service::run, &ios));
@@ -37,11 +37,6 @@ int main(int argc, char *argv[])
             if (command == "quit")
             {
                 done = true;
-            }
-
-            if (command == "list")
-            {
-                server.logLobby();
             }
         }
 
